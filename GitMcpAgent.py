@@ -56,7 +56,12 @@ async def mcpclnt_bayer_enterprise():
     """Connect to the GitHub MCP server, build an Agent, and use its tools."""
 
     # Bayer Enterprise GitHub configuration
-    github_token = "*****"
+    github_token = os.environ.get("GITHUB_ACCESS_TOKEN")
+    if not github_token:
+        raise RuntimeError(
+            "GITHUB_ACCESS_TOKEN is not set in the environment. "
+            "Please export it before running the Streamlit app."
+        )
     github_host = "github.bayer.com"
 
     # MCP stdio transport backed by the GitHub MCP server (via npx)

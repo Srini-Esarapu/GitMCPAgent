@@ -3,7 +3,7 @@ from strands import Agent
 from strands.models import BedrockModel
 # from strands_tools import http_request  # Unused
 from strands.tools.mcp import MCPClient
-# import os  # Unused
+import os
 import logging
 from mcp import StdioServerParameters
 from mcp.client.stdio import stdio_client
@@ -54,7 +54,12 @@ def get_agent() -> Agent:
         return st.session_state.agent
 
     # Bayer Enterprise GitHub configuration
-    github_token = "***"
+    github_token = os.environ.get("GITHUB_ACCESS_TOKEN")
+    if not github_token:
+        raise RuntimeError(
+            "GITHUB_ACCESS_TOKEN is not set in the environment. "
+            "Please export it before running the Streamlit app."
+        )
     github_host = "github.bayer.com"
 
     server_params = StdioServerParameters(
